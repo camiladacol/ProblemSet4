@@ -172,6 +172,16 @@ public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D>{
 
     @Override
     public Edge<V, D> obtenerArista(Comparable<V> sourceCriteria, Comparable<V> targetCriteria) {
+        for (V v : vertices()) {
+            if (sourceCriteria.compareTo(v) == 0) {
+                Set<Edge<V, D>> aristas = adyacencias.get(v);
+                for (Edge<V, D> a : aristas) {
+                    if (targetCriteria.compareTo(a.target()) == 0) {
+                        return a;
+                    }
+                }
+            }
+        }
         return null;
     }
 
