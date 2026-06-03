@@ -190,6 +190,12 @@ public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D>{
 
     @Override
     public List<Edge<V, D>> adyacencias(Comparable<V> verticeCriteria) {
+        for (V v : vertices()) {
+            if(verticeCriteria.compareTo(v) == 0){
+                Set<Edge<V, D>> aristas = adyacencias.get(v);
+                return List.copyOf(aristas);
+            }
+        }
         return List.of();
     }
 
@@ -220,11 +226,37 @@ public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D>{
 
     @Override
     public void vaciar() {
-
+        adyacencias.clear();
     }
 
     @Override
     public boolean tieneCiclos() {
+        Set<V> visitados = new HashSet<>();
+
+        for (V v : adyacencias.keySet()) {
+            if (buscarCiclo(v, visitados, new HashSet<>())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean buscarCiclo (V v, Set<V> visitados, Set<V> caminoActual) {
+        if (caminoActual.contains(v)) {
+            return true;
+        }
+        if  (visitados.contains(v)) {
+            return false;
+        }
+        visitados.add(v);
+        caminoActual.add(v);
+
+        for (Edge<V, D> arista : adyacencias.get(v)) {
+            if (buscarCiclo(arista.target(), visitados, caminoActual)) {
+                return true;
+            }
+        }
+        caminoActual.remove(v);
         return false;
     }
 }
