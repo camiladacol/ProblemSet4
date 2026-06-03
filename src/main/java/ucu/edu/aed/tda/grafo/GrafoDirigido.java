@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import ucu.edu.aed.tda.grafo.model.edge.DirectedEdge;
 import ucu.edu.aed.tda.grafo.model.edge.Edge;
@@ -192,7 +195,27 @@ public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D>{
 
     @Override
     public boolean esConexo() {
-        return false;
+        List<V> todosLosVertices = new ArrayList<>(vertices());
+
+        if (todosLosVertices.isEmpty()) return true;
+
+        Set<V> visitados = new HashSet<>();
+        Queue<V> cola = new LinkedList<>();
+
+        cola.add(todosLosVertices.get(0));
+        visitados.add(todosLosVertices.get(0));
+
+        while (!cola.isEmpty()) {
+            V actual = cola.poll();
+            for (Edge<V, D> arista : adyacencias.get(actual)) {
+                if (!visitados.contains(arista.target())) {
+                    visitados.add(arista.target());
+                    cola.add(arista.target());
+                }
+            }
+        }
+
+        return visitados.size() == todosLosVertices.size();
     }
 
     @Override
