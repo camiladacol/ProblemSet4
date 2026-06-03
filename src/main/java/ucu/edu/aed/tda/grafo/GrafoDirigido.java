@@ -35,7 +35,15 @@ public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D>{
 
     @Override
     public Set<V> predecessors(Comparable<V> criteria) {
-        return Set.of();
+        Set<V> predecesores = new HashSet<>();
+        for (V v : vertices()) {
+            for (Edge<V, D> arista : adyacencias.get(v)) {
+                if (criteria.compareTo(arista.target()) == 0) {
+                    predecesores.add(v);
+                }
+            }
+        }
+        return predecesores;
     }
 
     @Override
