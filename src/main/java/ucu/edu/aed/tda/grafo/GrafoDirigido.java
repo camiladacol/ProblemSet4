@@ -101,7 +101,32 @@ public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D>{
 
     @Override
     public boolean removerVertice(Comparable<V> criteria) {
-        return false;
+        V verticeAEliminar = buscarVertice(criteria);
+
+        if (verticeAEliminar == null) {
+            return false;
+        }
+
+        // eliminamos el vertice del mapa de adyacencias (con esto borramos el vertice y las aristas salientes)
+        adyacencias.remove(verticeAEliminar);
+
+
+        // recorremos el grafo para eloiminar las aristas entrantes hacia el vertice
+        for (V v : adyacencias.keySet()) {
+            Set<Edge<V, D>> conexiones = adyacencias.get(v);
+            // usamos iterador para poder eliminar de una forma segurda
+            Iterator<Edge<V, D>> iterator = conexiones.iterator();
+            while (iterator.hasNext()) {
+                Edge<V, D> arista = iterator.next();
+
+                // si la arista apunta al certice a eliminar la borramos
+                if (arista.target().equals(verticeAEliminar)) {
+                    iterator.remove();
+                }
+            }
+
+        }
+        return true; // si el vertice fue encontrado y eliminado retormanos true
     }
 
     @Override
