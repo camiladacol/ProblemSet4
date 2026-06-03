@@ -1,12 +1,13 @@
 package ucu.edu.aed.tda.grafo;
 
 import ucu.edu.aed.tda.grafo.model.IGraph;
+import ucu.edu.aed.tda.grafo.model.edge.Edge;
 import ucu.edu.aed.tda.grafo.model.edge.WeightedEdge;
 import ucu.edu.aed.tda.grafo.model.result.IDijkstraResult;
 import ucu.edu.aed.tda.grafo.model.result.IFloydWarshallResult;
 import ucu.edu.aed.tda.grafo.model.result.Path;
 
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class GrafoDirigidoAlgortimos implements IDirectedGraphAlgorithms{
@@ -47,7 +48,28 @@ public class GrafoDirigidoAlgortimos implements IDirectedGraphAlgorithms{
 
     @Override
     public <V, D> void recorridoEnAmplitud(IGraph<V, D> grafo, Comparable<V> sourceCriteria, Consumer<V> consumer) {
+        V origen = grafo.buscarVertice(sourceCriteria);
 
+        if (origen == null) {
+            return;
+        }
+        Set<V> visitados = new HashSet<>();
+        Queue<V> cola = new LinkedList<>();
+        visitados.add(origen);
+        cola.offer(origen);
+
+        while (!cola.isEmpty()) {
+            V actual = cola.poll();
+            consumer.accept(actual);
+
+            for (Edge<V, D> arista : grafo.adyacencias(grafo.construirComparable(actual))) {
+                V vecino = arista.target();
+
+                if (visitados.add(vecino)) {
+                    cola.offer(vecino);
+                }
+            }
+        }
     }
 
     @Override
