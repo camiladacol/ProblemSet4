@@ -1,9 +1,14 @@
 package ucu.edu.aed.tda.grafo;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import ucu.edu.aed.tda.grafo.model.edge.DirectedEdge;
 import ucu.edu.aed.tda.grafo.model.edge.Edge;
-
-import java.util.*;
 
 public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D>{
 
@@ -129,18 +134,39 @@ public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D>{
         return true; // si el vertice fue encontrado y eliminado retormanos true
     }
 
+    /**
+     * Conjunto de vértices (preferible devolver vista inmodificable).
+     */
     @Override
     public Set<V> vertices() {
-        return Set.of();
+        return adyacencias.keySet();
     }
 
+    /**
+     * Conjunto de aristas (preferible vista inmodificable).
+     */
     @Override
     public Set<Edge<V, D>> aristas() {
-        return Set.of();
+        Set<Edge<V, D>> setDeAristas = new HashSet<>(); //inicias un set de aristas vacio
+        for (V v : adyacencias.keySet()) { //recorres todos los vertices
+            Set<Edge<V, D>> aristas = adyacencias.get(v); //para cada vertice obtenes sus aristas
+            setDeAristas.addAll(aristas); //agregas las aristas al set
+        }
+        return setDeAristas;
     }
 
     @Override
     public boolean existeArista(Comparable<V> sourceCriteria, Comparable<V> targetCriteria) {
+        for (V v : vertices()) { //recorro todos los vertices
+            if (sourceCriteria.compareTo(v) == 0) { //veo si existe el origen
+                Set<Edge<V, D>> aristas = adyacencias.get(v); //obetnemos aristas del vertice
+                for (Edge<V, D> a : aristas) {
+                    if (targetCriteria.compareTo(a.target()) == 0) {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
