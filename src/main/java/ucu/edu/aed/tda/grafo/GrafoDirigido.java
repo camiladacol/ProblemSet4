@@ -1,11 +1,6 @@
 package ucu.edu.aed.tda.grafo;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 import ucu.edu.aed.tda.grafo.model.IGraph;
@@ -26,12 +21,29 @@ public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D>{
 
     @Override
     public Set<V> successors(Comparable<V> criteria) {
+        for (V v : vertices()) {
+            if (criteria.compareTo(v) == 0) {
+                Set<V> sucesores = new HashSet<>();
+                for (Edge<V, D> arista : adyacencias.get(v)) {
+                    sucesores.add(arista.target());
+                }
+                return sucesores;
+            }
+        }
         return Set.of();
     }
 
     @Override
     public Set<V> predecessors(Comparable<V> criteria) {
-        return Set.of();
+        Set<V> predecesores = new HashSet<>();
+        for (V v : vertices()) {
+            for (Edge<V, D> arista : adyacencias.get(v)) {
+                if (criteria.compareTo(arista.target()) == 0) {
+                    predecesores.add(v);
+                }
+            }
+        }
+        return predecesores;
     }
 
     @Override
@@ -204,7 +216,27 @@ public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D>{
 
     @Override
     public boolean esConexo() {
-        return false;
+        List<V> todosLosVertices = new ArrayList<>(vertices());
+
+        if (todosLosVertices.isEmpty()) return true;
+
+        Set<V> visitados = new HashSet<>();
+        Queue<V> cola = new LinkedList<>();
+
+        cola.add(todosLosVertices.get(0));
+        visitados.add(todosLosVertices.get(0));
+
+        while (!cola.isEmpty()) {
+            V actual = cola.poll();
+            for (Edge<V, D> arista : adyacencias.get(actual)) {
+                if (!visitados.contains(arista.target())) {
+                    visitados.add(arista.target());
+                    cola.add(arista.target());
+                }
+            }
+        }
+
+        return visitados.size() == todosLosVertices.size();
     }
 
     @Override
