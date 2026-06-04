@@ -296,12 +296,45 @@ public class GrafoDirigidoAlgortimos implements IDirectedGraphAlgorithms{
 
     @Override
     public <V, D extends WeightedEdge> V obtenerCentroGrafo(IDirectedIGraph<V, D> grafo) {
-        return null;
+
+        if (grafo.vertices().isEmpty()) {
+            return null;
+        }
+
+        V centro = null;
+        double excentriciadMinima = Double.MAX_VALUE;
+
+        // Calculamos la excentricidad de cada vértice
+        for (V nodo : grafo.vertices()) {
+            double excentrididad = obtenerExcentricidad(grafo, (Comparable<V>) nodo);
+
+            if (excentrididad < excentriciadMinima) {
+                excentriciadMinima = excentrididad;
+                centro = nodo;
+            }
+        }
+    return centro;
     }
 
     @Override
     public <V, D extends WeightedEdge> double obtenerExcentricidad(IDirectedIGraph<V, D> grafo, Comparable<V> vertexCriteria) {
-        return 0;
+        V origen = grafo.buscarVertice(vertexCriteria);
+        if (origen == null)
+        {
+            return 0;
+        }
+
+        IFloydWarshallResult<V> resultado = this.floyd(grafo);
+        double costoMaximo = 0;
+        for (V destino: grafo.vertices()) {
+            if (!origen.equals(destino)) {
+                double costo = resultado.getCost(destino, origen);
+                if(costo> costoMaximo){
+                    costoMaximo = costo;
+                }
+            }
+        }
+        return costoMaximo;
     }
 
     @Override

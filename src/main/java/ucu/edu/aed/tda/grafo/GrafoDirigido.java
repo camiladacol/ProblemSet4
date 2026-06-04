@@ -60,9 +60,9 @@ public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D>{
 
     @Override
     public V buscarVertice(Comparable<V> criterio) {
-       for (V v : adyacencias.keySet()) { // recorre todos los vertices del mapa de adyacencias
-           if (criterio.compareTo(v) == 0) {
-               return v; // retorna el vertice si coincide segun el criterio
+       for (V vertice : adyacencias.keySet()) { // recorre todos los vertices del mapa de adyacencias
+           if (criterio.compareTo(vertice) == 0) {
+               return vertice; // retorna el vertice si coincide segun el criterio
            }
        }
        return null;
@@ -135,8 +135,8 @@ public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D>{
 
 
         // recorremos el grafo para eloiminar las aristas entrantes hacia el vertice
-        for (V v : adyacencias.keySet()) {
-            Set<Edge<V, D>> conexiones = adyacencias.get(v);
+        for (V vertice : adyacencias.keySet()) {
+            Set<Edge<V, D>> conexiones = adyacencias.get(vertice);
             // usamos iterador para poder eliminar de una forma segurda
             Iterator<Edge<V, D>> iterator = conexiones.iterator();
             while (iterator.hasNext()) {
