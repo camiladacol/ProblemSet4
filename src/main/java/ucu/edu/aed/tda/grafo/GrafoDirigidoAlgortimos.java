@@ -124,7 +124,7 @@ public class GrafoDirigidoAlgortimos implements IDirectedGraphAlgorithms{
             }
         };
     }
-    //Warshall no calcula costos mínimos. Su objetivo es determinar si existe o no un camino entre cada par de vértices del grafo.
+    //Warshall no calcula costos mínimos.
     // conectado[i][j] = true / existe camino
     // conectado[i][j] = false / no existe camino
 
