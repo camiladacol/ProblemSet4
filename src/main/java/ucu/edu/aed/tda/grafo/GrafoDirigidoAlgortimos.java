@@ -296,14 +296,76 @@ public class GrafoDirigidoAlgortimos implements IDirectedGraphAlgorithms{
 
     @Override
     public <V, D extends WeightedEdge> V obtenerCentroGrafo(IDirectedIGraph<V, D> grafo) {
-        return null;
+
+        if (grafo.vertices().isEmpty()) {
+            return null;
+        }
+
+        V centro = null;
+        double excentriciadMinima = Double.MAX_VALUE;
+
+        // Calculamos la excentricidad de cada vértice
+        for (V nodo : grafo.vertices()) {
+            double excentrididad = obtenerExcentricidad(grafo, (Comparable<V>) nodo);
+
+            if (excentrididad < excentriciadMinima) {
+                excentriciadMinima = excentrididad;
+                centro = nodo;
+            }
+        }
+    return centro;
     }
 
     @Override
     public <V, D extends WeightedEdge> double obtenerExcentricidad(IDirectedIGraph<V, D> grafo, Comparable<V> vertexCriteria) {
-        return 0;
+        V origen = grafo.buscarVertice(vertexCriteria);
+        if (origen == null)
+        {
+            return 0;
+        }
+
+        IFloydWarshallResult<V> resultado = this.floyd(grafo);
+        double costoMaximo = 0;
+        for (V destino: grafo.vertices()) {
+            if (!origen.equals(destino)) {
+                double costo = resultado.getCost(destino, origen);
+                if(costo> costoMaximo){
+                    costoMaximo = costo;
+                }
+            }
+        }
+        return costoMaximo;
     }
 
+    @Override
+    public <V, D extends WeightedEdge> List<Path<V>> obtenerTodosLosCaminos(Comparable<V> source, Comparable<V> target, IGraph<V, D> grafo) {
+        List<Path<V>> resultado = new ArrayList<>();
+        List<V> caminoActual = new ArrayList<>();
+
+        V verticeInicial = grafo.buscarVertice(source);
+        if (verticeInicial == null) return resultado;
+
+        caminoActual.add(verticeInicial);
+        dfs(verticeInicial, target, grafo, caminoActual, resultado, 0);
+
+        return resultado;
+    }
+
+    private <V, D extends WeightedEdge> void dfs(V actual, Comparable<V> target, IGraph<V, D> grafo, List<V> caminoActual, List<Path<V>> resultado, double costoActual) {
+        if (target.compareTo(actual) == 0 && caminoActual.size() > 1) {
+            resultado.add(new Path<>(new ArrayList<>(caminoActual), costoActual));
+            return;
+        }
+
+        for (Edge<V, D> arista : grafo.adyacencias(grafo.construirComparable(actual))) {
+            V vecino = arista.target();
+            if (!caminoActual.contains(vecino)) {
+                caminoActual.add(vecino);
+                dfs(vecino, target, grafo, caminoActual, resultado, costoActual + arista.dato().getWeight());
+                caminoActual.remove(caminoActual.size() - 1);
+            }
+        }
+    }
 
     @Override
     public <V, D> void recorridoEnProfundidad(IGraph<V, D> grafo, Comparable<V> sourceCriteria, Consumer<V> consumer) {
