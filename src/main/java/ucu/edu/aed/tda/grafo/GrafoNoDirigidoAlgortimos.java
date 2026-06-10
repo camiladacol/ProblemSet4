@@ -1,19 +1,40 @@
 package ucu.edu.aed.tda.grafo;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 import ucu.edu.aed.tda.grafo.model.edge.Edge;
 import ucu.edu.aed.tda.grafo.model.edge.WeightedEdge;
 
 public class GrafoNoDirigidoAlgortimos implements IUndirectedGraphAlgorithm {
+
     @Override
     public <V, D extends WeightedEdge> IUndirectedGraph<V, D> kruskal(IUndirectedGraph<V, D> graph) {
-        return null;
+
+        IUndirectedGraph<V, D> resultado = new GrafoNoDirigido<>();
+        for (V vertice : graph.vertices()) {
+            resultado.agregarVertice(vertice);
+        }
+
+        List<Edge<V, D>> aristas = new ArrayList<>(graph.aristas());
+        aristas.sort(Comparator.comparingDouble(a -> a.dato().getWeight()));
+
+        int n = graph.cantidadDeVertices() - 1;
+        int i = 0;
+
+        while (i < n && !aristas.isEmpty()) {
+
+            Edge<V, D> arista = aristas.remove(0);
+            resultado.agregarArista(arista.source(), arista.target(), arista.dato());
+            if (resultado.tieneCiclos()) {
+
+                resultado.eliminarArista(resultado.construirComparable(arista.source()),
+                        resultado.construirComparable(arista.target()));
+            } else {
+                i++;
+            }
+        }
+        return resultado;
     }
 
     @Override
