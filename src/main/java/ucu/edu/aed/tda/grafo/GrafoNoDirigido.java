@@ -7,7 +7,7 @@ import ucu.edu.aed.tda.grafo.model.edge.WeightedEdge;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class GrafoNoDirigido<V, D> implements IUndirectedGraph<V, D>, IUndirectedGraphAlgorithm {
+public class GrafoNoDirigido<V, D> implements IUndirectedGraph<V, D> {
 
     private final Map<V, Set<Edge<V, D>>> adyacencias;
 
@@ -197,25 +197,5 @@ public class GrafoNoDirigido<V, D> implements IUndirectedGraph<V, D>, IUndirecte
             }
         }
         return false;
-    }
-
-    @Override
-    public <V, D extends WeightedEdge> IUndirectedGraph<V, D> kruskal(IUndirectedGraph<V, D> graph) {
-        return null;
-    }
-
-    @Override
-    public <V, D extends WeightedEdge> IUndirectedGraph<V, D> prim(IUndirectedGraph<V, D> graph, Comparable<V> source) {
-        return null;
-    }
-
-    @Override
-    public <V, D extends WeightedEdge> Edge<V, D> searchMinEdge(IUndirectedGraph<V, D> graph, Collection<V> U, Collection<V> V) {
-        return null;
-    }
-
-    @Override
-    public <V, D> void bea(IUndirectedGraph<V, D> graph, Consumer<V> consumer) {
-
     }
 }

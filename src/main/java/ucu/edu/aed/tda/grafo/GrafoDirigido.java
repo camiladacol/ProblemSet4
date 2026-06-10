@@ -1,15 +1,9 @@
 package ucu.edu.aed.tda.grafo;
 
 import java.util.*;
-import java.util.function.Consumer;
 
-import ucu.edu.aed.tda.grafo.model.IGraph;
 import ucu.edu.aed.tda.grafo.model.edge.DirectedEdge;
 import ucu.edu.aed.tda.grafo.model.edge.Edge;
-import ucu.edu.aed.tda.grafo.model.edge.WeightedEdge;
-import ucu.edu.aed.tda.grafo.model.result.IDijkstraResult;
-import ucu.edu.aed.tda.grafo.model.result.IFloydWarshallResult;
-import ucu.edu.aed.tda.grafo.model.result.Path;
 
 public class GrafoDirigido<V, D> implements IDirectedIGraph<V, D>{
 
