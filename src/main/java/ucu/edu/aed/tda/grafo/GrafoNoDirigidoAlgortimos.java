@@ -1,6 +1,13 @@
 package ucu.edu.aed.tda.grafo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import ucu.edu.aed.tda.grafo.model.edge.Edge;
@@ -39,7 +46,58 @@ public class GrafoNoDirigidoAlgortimos implements IUndirectedGraphAlgorithm {
 
     @Override
     public <V, D extends WeightedEdge> IUndirectedGraph<V, D> prim(IUndirectedGraph<V, D> graph, Comparable<V> source) {
-        return null;
+
+        IUndirectedGraph<V, D> resultado = new GrafoNoDirigido<>();
+
+        Set<V> visitados = new HashSet<>();
+
+        // agregar vértices al nuevo grafo
+        for (V v : graph.vertices()) {
+            resultado.agregarVertice(v);
+        }
+
+        V origen = graph.buscarVertice(source);
+
+        visitados.add(origen);
+
+        while (visitados.size() < graph.cantidadDeVertices()) {
+
+            Edge<V, D> min = null;
+
+            // buscar arista mínima
+            for (V v : visitados) {
+
+                for (Edge<V, D> arista :
+                        graph.adyacencias(graph.construirComparable(v))) {
+
+                    V destino = arista.target();
+
+                    if (!visitados.contains(destino)) {
+
+                        if (min == null ||
+                                arista.dato().getWeight() <
+                                min.dato().getWeight()) {
+
+                            min = arista;
+                        }
+                    }
+                }
+            }
+
+            if (min == null) {
+                break;
+            }
+
+            resultado.agregarArista(
+                    min.source(),
+                    min.target(),
+                    min.dato()
+            );
+
+            visitados.add(min.target());
+        }
+
+        return resultado;
     }
 
     @Override
