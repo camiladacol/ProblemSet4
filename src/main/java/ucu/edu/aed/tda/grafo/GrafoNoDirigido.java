@@ -1,12 +1,6 @@
 package ucu.edu.aed.tda.grafo;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import ucu.edu.aed.tda.grafo.model.edge.Edge;
 import ucu.edu.aed.tda.grafo.model.edge.UndirectedEdge;
@@ -159,7 +153,27 @@ public class GrafoNoDirigido<V, D> implements IUndirectedGraph<V, D> {
 
     @Override
     public boolean esConexo() {
-        return false;
+        List<V> todosLosVertices = new ArrayList<>(vertices());
+
+        if (todosLosVertices.isEmpty()) return true;
+
+        Set<V> visitados = new HashSet<>();
+        Queue<V> cola = new LinkedList<>();
+
+        cola.add(todosLosVertices.get(0));
+        visitados.add(todosLosVertices.get(0));
+
+        while (!cola.isEmpty()) {
+            V actual = cola.poll();
+            for (Edge<V, D> arista : adyacencias(construirComparable(actual))) {
+                if (!visitados.contains(arista.target())) {
+                    visitados.add(arista.target());
+                    cola.add(arista.target());
+                }
+            }
+        }
+
+        return visitados.size() == todosLosVertices.size();
     }
 
     @Override
