@@ -44,7 +44,18 @@ public class GrafoNoDirigidoAlgortimos implements IUndirectedGraphAlgorithm {
 
     @Override
     public <V, D extends WeightedEdge> Edge<V, D> searchMinEdge(IUndirectedGraph<V, D> graph, Collection<V> U, Collection<V> V) {
-        return null;
+        Edge<V, D> minEdge = null;
+        for (V v : U) {
+            for (V u : V) {
+                Edge<V, D> edge = graph.obtenerArista(v, u);
+                if (edge != null) {
+                    if (minEdge == null || edge.dato().getWeight() < minEdge.dato().getWeight()) {
+                        minEdge = edge;
+                    }
+                }
+            }
+        }
+        return minEdge;
     }
 
     @Override
