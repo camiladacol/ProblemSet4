@@ -1,11 +1,15 @@
 package ucu.edu.aed.tda.grafo;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import ucu.edu.aed.tda.grafo.model.edge.Edge;
 import ucu.edu.aed.tda.grafo.model.edge.UndirectedEdge;
-import ucu.edu.aed.tda.grafo.model.edge.WeightedEdge;
-
-import java.util.*;
-import java.util.function.Consumer;
 
 public class GrafoNoDirigido<V, D> implements IUndirectedGraph<V, D> {
 
@@ -27,7 +31,7 @@ public class GrafoNoDirigido<V, D> implements IUndirectedGraph<V, D> {
     @Override
     public V buscarVertice(Comparable<V> criterio) {
         for (V vertice: adyacencias.keySet()) {
-            if (criterio.compareTo(vertice) > 0) {
+            if (criterio.compareTo(vertice) == 0) {
                 return vertice;
             }
         }
